@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
-use Vinkla\Hashids\Facades\Hashids;
+
 use App\Models\User;
 
 class Tlync
@@ -28,7 +28,7 @@ protected $token;
        // $HashedId = Hashids::connection('tlync')->encode($Id);
     //    $HashedTenantId = Hashids::connection('tlync')->encode($TenantId);
         $HashedId =Crypt::encrypt((integer)$Id * 2000);
-        $HashedTenantId =Crypt::encrypt((integer)$TenantId * 2000);
+        $HashedTenantId =substr (Crypt::encrypt((integer)$TenantId * 2000), -8);
         $payload = [
             'id' =>  in_array( config('tlync.tlync_environment'),['local', 'uat', 'test']) ? config('tlync.tlync_test_store_id') : config('tlync.tlync_live_store_id'),
             'amount' => $Amount,
