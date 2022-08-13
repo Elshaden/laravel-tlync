@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 
 use App\Models\User;
+use phpDocumentor\Reflection\Types\Integer;
 use Vinkla\Hashids\Facades\Hashids;
 
 class Tlync
@@ -24,10 +25,10 @@ protected $token;
 
 
 
-    public function InitiatePayment(float $Amount, string $Id, $TenantId,$UserPhone, $UserEmail = Null)
+    public function InitiatePayment(float $Amount, integer $para_1,integer $para_2, string $UserPhone, string $UserEmail = Null)
     {
-         $HashedId = Hashids::encode($Id);
-         $HashedTenantId = Hashids::encode($TenantId);
+         $HashedId = Hashids::encode($para_1);
+         $HashedTenantId = Hashids::encode($para_2);
 
         $payload = [
             'id' =>  in_array( config('tlync.tlync_environment'),['local', 'uat', 'test']) ? config('tlync.tlync_test_store_id') : config('tlync.tlync_live_store_id'),
@@ -35,7 +36,7 @@ protected $token;
             'phone' => $UserPhone,
             'email' => $UserEmail,
             'backend_url' => config('tlync.callback_url'),
-            'frontend_url' =>config('tlync.frontend_url') .$Id,
+            'frontend_url' =>config('tlync.frontend_url') .$para_1,
             'custom_ref' => $HashedId.'|'.rand(100,10000).'|'.$HashedTenantId,
         ];
         $payload = array_filter($payload);
@@ -82,12 +83,22 @@ protected $token;
 
     public function callback(Request $request)
     {
-//        $user = User::find(1);
-//        auth()->login($user);
+
         $request->validate(['custom_ref'=>'required']);
 
-        $CallBack = new \App\Actions\Gateways\Tlync\CallBackClass();
-//        $Id =
-        return $CallBack->HandelCallBack($request);
+
+        $Paras = explode('|', $request->custom_ref);
+        try {
+            $para_1 = Hashids::decode($Paras[0])[0];
+            $para_2 = Hashids::decode($Paras[2])[0];
+        } catch (\Exception $e) {
+            return False;
+        }
+        if (! $para_1 || ! $para_2) {
+            return False;
+        }
+
+        app(config('tlync.callback_class'))->config('tlync.callback_class')($para_1, $para_2, $request->all());
+        return 'ok';
     }
 }

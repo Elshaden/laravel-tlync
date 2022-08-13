@@ -45,7 +45,7 @@ return [
      * The model class that should be used to mark the payment as paid or failed.
      * Example class \App\Models\Invoice.
      */
-    'payment_model' => env('TLYNC_PAYMENT_MODEL', \App\Models\Invoice::class),
+    'handel_call_back_class' => env('TLYNC_PAYMENT_CLASS', \App\Models\Invoice::class),
 
 
     /*
@@ -57,7 +57,7 @@ return [
      *  your Observer should be listening to changes in this field.
      *  And complete the process like notify the customer etc.
      */
-    'boolean_field' => env('FIELD_TO_CONFIRM_PAYMENT','paid'),
+    'handel_method' => env('METHOD_TO_CONFIRM_PAYMENT','HandelCallBack'),
 
 
 ];

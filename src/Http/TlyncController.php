@@ -16,7 +16,6 @@ class TlyncController
     public function callback(Request $request)
    {
      $response =  app(Tlync::class)->callback($request);
-       return response()->json($response ,200);
-   //  return response()->json(Null, 200);
+     return response()->json(null ,200);
     }
 }
