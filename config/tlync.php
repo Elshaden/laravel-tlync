@@ -5,7 +5,7 @@ return [
 
     'tlync_environment' => env('TLYNC_ENVIRONMENT', 'test'),
 
-    'use_own_tlync_account' => false,
+  //  'use_own_tlync_account' => false,
 
 
     'tlync_test_url' => 'https://c7drkx2ege.execute-api.eu-west-2.amazonaws.com/',
