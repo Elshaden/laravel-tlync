@@ -38,9 +38,9 @@ return [
     'connections' => [
 
         'main' => [
-            'salt' => config('tlync.custom_ref_salt'),
+            'salt' => env('HASHIDS_SALT', env('APP_KEY')),
             'length' => 32,
-            // 'alphabet' => 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
+            'alphabet' => 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
         ],
 
         'alternative' => [
@@ -50,7 +50,7 @@ return [
         ],
 
         'tlync'=>[
-            'salt' => config('tlync.custom_ref_salt'),
+            'salt' => env('HASHIDS_SALT', env('APP_KEY')),
             'length' => 32,
              'alphabet' => 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
         ],
