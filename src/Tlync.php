@@ -25,7 +25,7 @@ protected $token;
     public function InitiatePayment(float $Amount, string $Id, $TenantId,$UserPhone, $UserEmail = Null)
     {
         $HashedId = Hashids::connection('tlync')->encode($Id);
-        $HashedTenantId = Hashids::connection('tenant')->encode($TenantId);
+        $HashedTenantId = Hashids::connection('tlync')->encode($TenantId);
         $payload = [
             'id' =>  in_array( config('tlync.tlync_environment'),['local', 'uat', 'test']) ? config('tlync.tlync_test_store_id') : config('tlync.tlync_live_store_id'),
             'amount' => $Amount,
