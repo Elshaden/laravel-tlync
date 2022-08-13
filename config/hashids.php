@@ -38,8 +38,8 @@ return [
     'connections' => [
 
         'main' => [
-            'salt' => '',
-            'length' => 0,
+            'salt' => config('tlync.custom_ref_salt'),
+            'length' => 32,
             // 'alphabet' => 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
         ],
 
