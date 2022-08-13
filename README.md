@@ -27,11 +27,7 @@ This is the contents of the published config file:
 
 And Also publishes the Hashids file, if you already have that, please add the custom connections to your file
 
-Optionally, you can publish the views using
 
-```bash
-php artisan vendor:publish --tag="laravel-tlync-views"
-```
 
 ## Usage
 
