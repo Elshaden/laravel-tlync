@@ -1,10 +1,10 @@
 <?php
 
-namespace Egate\Tlync\Tests;
+namespace Elshaden\Tlync\Tests;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
-use Egate\Tlync\TlyncServiceProvider;
+use Elshaden\Tlync\TlyncServiceProvider;
 
 class TestCase extends Orchestra
 {
@@ -13,7 +13,7 @@ class TestCase extends Orchestra
         parent::setUp();
 
         Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'Egate\\Tlync\\Database\\Factories\\'.class_basename($modelName).'Factory'
+            fn (string $modelName) => 'Elshaden\\Tlync\\Database\\Factories\\'.class_basename($modelName).'Factory'
         );
     }
 

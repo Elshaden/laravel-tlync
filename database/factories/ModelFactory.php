@@ -1,6 +1,6 @@
 <?php
 
-namespace Egate\Tlync\Database\Factories;
+namespace Elshaden\Tlync\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 

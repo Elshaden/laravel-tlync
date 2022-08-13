@@ -2,11 +2,11 @@
     "name": "elshaden/laravel-tlync",
     "description": "Laravel SKD for Tlync Payment Gateway",
     "keywords": [
-        "Egate",
+        "Elshaden",
         "laravel",
         "laravel-tlync"
     ],
-    "homepage": "https://github.com/egate/laravel-tlync",
+    "homepage": "https://github.com/Elshaden/laravel-tlync",
     "license": "MIT",
     "authors": [
         {
@@ -32,13 +32,13 @@
     },
     "autoload": {
         "psr-4": {
-            "Egate\\Tlync\\": "src",
-            "Egate\\Tlync\\Database\\Factories\\": "database/factories"
+            "Elshaden\\Tlync\\": "src",
+            "Elshaden\\Tlync\\Database\\Factories\\": "database/factories"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Egate\\Tlync\\Tests\\": "tests"
+            "Elshaden\\Tlync\\Tests\\": "tests"
         }
     },
     "scripts": {
@@ -56,10 +56,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Egate\\Tlync\\TlyncServiceProvider"
+                "Elshaden\\Tlync\\TlyncServiceProvider"
             ],
             "aliases": {
-                "Tlync": "Egate\\Tlync\\Facades\\Tlync"
+                "Tlync": "Elshaden\\Tlync\\Facades\\Tlync"
             }
         }
     },

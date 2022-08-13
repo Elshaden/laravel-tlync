@@ -1,16 +1,16 @@
 <?php
 
-namespace Egate\Tlync\Facades;
+namespace Elshaden\Tlync\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @see \Egate\Tlync\Tlync
+ * @see \Elshaden\Tlync\Tlync
  */
 class Tlync extends Facade
 {
     protected static function getFacadeAccessor()
     {
-        return \Egate\Tlync\Tlync::class;
+        return \Elshaden\Tlync\Tlync::class;
     }
 }

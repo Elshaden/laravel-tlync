@@ -2,8 +2,8 @@
 
 # Laravel SKD for Tlync Payment Gateway
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/egate/laravel-tlync.svg?style=flat-square)](https://packagist.org/packages/egate/laravel-tlync)
-[![Total Downloads](https://img.shields.io/packagist/dt/egate/laravel-tlync.svg?style=flat-square)](https://packagist.org/packages/egate/laravel-tlync)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/elshaden/laravel-tlync.svg?style=flat-square)](https://packagist.org/packages/elshaden/laravel-tlync)
+[![Total Downloads](https://img.shields.io/packagist/dt/elshaden/laravel-tlync.svg?style=flat-square)](https://packagist.org/packages/elshaden/laravel-tlync)
 
 
 ## Installation
@@ -11,7 +11,7 @@
 You can install the package via composer:
 
 ```bash
-composer require egate/laravel-tlync
+composer require elshaden/laravel-tlync
 ```
 
 You can publish and run the migrations with:
@@ -32,7 +32,7 @@ And Also publishes the Hashids file, if you already have that, please add the cu
 ## Usage
 
 ```php
-$tlync = new Egate\Tlync();
+$tlync = new Elshaden\Tlync();
 
 Doc will be updated soon
 
@@ -40,7 +40,7 @@ Doc will be updated soon
 
 ## Contributing
 
-Please see [CONTRIBUTING](https://github.com/Egate/.github/blob/main/CONTRIBUTING.md) for details.
+Please see [CONTRIBUTING](https://github.com/Elshaden/.github/blob/main/CONTRIBUTING.md) for details.
 
 ## Security Vulnerabilities
 

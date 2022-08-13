@@ -1,5 +1,5 @@
 <?php
 
-use Egate\Tlync\Tests\TestCase;
+use Elshaden\Tlync\Tests\TestCase;
 
 uses(TestCase::class)->in(__DIR__);

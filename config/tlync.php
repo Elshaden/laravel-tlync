@@ -1,6 +1,6 @@
 <?php
 
-// config for Egate/Tlync
+// config for Elshaden/Tlync
 return [
 
     'tlync_environment' => env('TLYNC_ENVIRONMENT', 'test'),

@@ -1,6 +1,6 @@
 <?php
 
-namespace Egate\Tlync;
+namespace Elshaden\Tlync;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;

@@ -1,11 +1,11 @@
 <?php
 
-namespace Egate\Tlync;
+namespace Elshaden\Tlync;
 
 use Illuminate\Support\Facades\Route;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Egate\Tlync\Commands\TlyncCommand;
+use Elshaden\Tlync\Commands\TlyncCommand;
 
 class TlyncServiceProvider extends PackageServiceProvider
 {
@@ -26,6 +26,6 @@ class TlyncServiceProvider extends PackageServiceProvider
 
     public function packageRegistered(): void
     {
-        Route::post('/api/tlync/callback', 'Egate\Tlync\Http\TlyncController@callback');
+        Route::post('/api/tlync/callback', 'Elshaden\Tlync\Http\TlyncController@callback');
     }
 }

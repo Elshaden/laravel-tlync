@@ -1,6 +1,6 @@
 <?php
 
-namespace Egate\Tlync\Commands;
+namespace Elshaden\Tlync\Commands;
 
 use Illuminate\Console\Command;
 

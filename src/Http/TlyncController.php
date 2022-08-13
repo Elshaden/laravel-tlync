@@ -1,8 +1,8 @@
 <?php
 
-namespace Egate\Tlync\Http;
+namespace Elshaden\Tlync\Http;
 
-use Egate\Tlync\Tlync;
+use Elshaden\Tlync\Tlync;
 use Illuminate\Http\Request;
 
 class TlyncController
