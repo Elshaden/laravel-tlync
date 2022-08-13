@@ -28,8 +28,7 @@ protected $token;
     {
          $HashedId = Hashids::encode($Id);
          $HashedTenantId = Hashids::encode($TenantId);
-//        $HashedId =Crypt::encrypt((integer)$Id * 2000);
-//        $HashedTenantId =substr(md5((integer)$TenantId * 2000), -8);
+
         $payload = [
             'id' =>  in_array( config('tlync.tlync_environment'),['local', 'uat', 'test']) ? config('tlync.tlync_test_store_id') : config('tlync.tlync_live_store_id'),
             'amount' => $Amount,
