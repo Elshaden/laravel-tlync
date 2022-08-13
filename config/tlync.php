@@ -45,7 +45,7 @@ return [
      * The model class that should be used to mark the payment as paid or failed.
      * Example class \App\Models\Invoice.
      */
-    'payment_model' => '',
+    'payment_model' => env('TLYNC_PAYMENT_MODEL', \App\Models\Invoice::class),
 
 
     /*
@@ -53,8 +53,11 @@ return [
      *  This should have corresponding observer to listen to changes.
      *   And completes the process if the payment is paid.
      *   Example field 'paid' in \App\Models\Invoice.
+     *   Will be set to true if the payment is successful.
+     *  your Observer should be listening to changes in this field.
+     *  And complete the process like notify the customer etc.
      */
-    'boolean_field' => 'paid',
+    'boolean_field' => env('FIELD_TO_CONFIRM_PAYMENT','paid'),
 
 
 ];
