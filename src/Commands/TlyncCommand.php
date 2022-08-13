@@ -1,12 +1,12 @@
 <?php
 
-namespace VendorName\Skeleton\Commands;
+namespace Egate\Tlync\Commands;
 
 use Illuminate\Console\Command;
 
-class SkeletonCommand extends Command
+class TlyncCommand extends Command
 {
-    public $signature = 'skeleton';
+    public $signature = 'laravel-tlync';
 
     public $description = 'My command';
 
