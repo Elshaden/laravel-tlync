@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 
 use App\Models\User;
-use phpDocumentor\Reflection\Types\Integer;
 use Vinkla\Hashids\Facades\Hashids;
 
 class Tlync
@@ -25,7 +24,7 @@ protected $token;
 
 
 
-    public function InitiatePayment(float $Amount, integer $para_1,integer $para_2, string $UserPhone, string $UserEmail = Null)
+    public function InitiatePayment(float $Amount, int $para_1,int $para_2, string $UserPhone, string $UserEmail = Null)
     {
          $HashedId = Hashids::encode($para_1);
          $HashedTenantId = Hashids::encode($para_2);
