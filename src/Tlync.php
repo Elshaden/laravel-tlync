@@ -83,7 +83,7 @@ class Tlync
 
         $request->validate(['custom_ref' => 'required']);
         $Ip = $this->getIp();
-        Log::info('TylncCallback', ['Request' => $request->all(), 'IP' => $Ip, 'hostname' => $request->host()]);
+        Log::info('TylncCallback', ['Request' => $request->all(), 'IP' => $Ip]);
 
         $request->from_ip = $Ip;
         $Paras = explode('|', $request->custom_ref);
@@ -102,7 +102,7 @@ class Tlync
         $CallBackMethod = config('tlync.handel_method');
 
         $Class = new $CallbackClass();
-        $Class->$CallBackMethod($para_1, $para_2, $request);
+        $Class->$CallBackMethod($para_1, $para_2, $request->all());
 
     }
 
