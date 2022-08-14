@@ -82,23 +82,23 @@ class Tlync
     {
 
         $request->validate(['custom_ref' => 'required']);
-
+        Log::info('TylncCallback', ['Request' => $request->all(), 'IP' => $request->ip(), 'hostname' => $request->host()]);
 
         $Paras = explode('|', $request->custom_ref);
         try {
             $para_1 = Hashids::decode($Paras[0])[0];
             $para_2 = Hashids::decode($Paras[2])[0];
         } catch (\Exception $e) {
+            Log::alert('Received Payment Do Not Match', ['custom_ref' => $request->all()]);
             return False;
         }
         if (!$para_1 || !$para_2) {
+            Log::alert('Received Payment Do Not Match', ['custom_ref' => $request->all()]);
             return False;
         }
         $CallbackClass = config('tlync.handel_call_back_class');
         $CallBackMethod = config('tlync.handel_method');
 
-        ray($CallbackClass);
-        //     app(App\Actions\Gateways\Tlync\CallBackClass::class)->HandelCallBack($para_1, $para_2, $request->all());
         $Class = new $CallbackClass();
         $Class->$CallBackMethod($para_1, $para_2, $request);
 
