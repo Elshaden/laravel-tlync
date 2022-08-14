@@ -13,44 +13,44 @@ use Vinkla\Hashids\Facades\Hashids;
 
 class Tlync
 {
-protected $url;
-protected $token;
+    protected $url;
+    protected $token;
+
     public function __construct()
     {
-        $this->url = in_array( config('tlync.tlync_environment'),['local', 'uat', 'test']) ? config('tlync.tlync_test_url') : config('tlync.tlync_live_url');
-        $this->token = in_array( config('tlync.tlync_environment'),['local', 'uat', 'test']) ? config('tlync.tlync_test_token') : config('tlync.tlync_live_token');
+        $this->url = in_array(config('tlync.tlync_environment'), ['local', 'uat', 'test']) ? config('tlync.tlync_test_url') : config('tlync.tlync_live_url');
+        $this->token = in_array(config('tlync.tlync_environment'), ['local', 'uat', 'test']) ? config('tlync.tlync_test_token') : config('tlync.tlync_live_token');
 
     }
 
 
-
-    public function InitiatePayment(float $Amount, int $para_1,int $para_2, string $UserPhone, string $UserEmail = Null)
+    public function InitiatePayment(float $Amount, int $para_1, int $para_2, string $UserPhone, string $UserEmail = Null)
     {
-         $HashedId = Hashids::encode($para_1);
-         $HashedTenantId = Hashids::encode($para_2);
+        $HashedId = Hashids::encode($para_1);
+        $HashedTenantId = Hashids::encode($para_2);
 
         $payload = [
-            'id' =>  in_array( config('tlync.tlync_environment'),['local', 'uat', 'test']) ? config('tlync.tlync_test_store_id') : config('tlync.tlync_live_store_id'),
+            'id' => in_array(config('tlync.tlync_environment'), ['local', 'uat', 'test']) ? config('tlync.tlync_test_store_id') : config('tlync.tlync_live_store_id'),
             'amount' => $Amount,
             'phone' => $UserPhone,
             'email' => $UserEmail,
             'backend_url' => config('tlync.callback_url'),
-            'frontend_url' =>config('tlync.frontend_url') .$para_1,
-            'custom_ref' => $HashedId.'|'.rand(100,10000).'|'.$HashedTenantId,
+            'frontend_url' => config('tlync.frontend_url') . $para_1,
+            'custom_ref' => $HashedId . '|' . rand(100, 10000) . '|' . $HashedTenantId,
         ];
         $payload = array_filter($payload);
         ray($payload);
         $endpoint = 'payment/initiate';
 
         $Response = $this->SendRequest($endpoint, $payload);
-        if(isset($Response['result']) && $Response['result'] == 'success'){
-        //    Log::info('Tlync Payment Initiated', ['Response'=>$Response]);
+        if (isset($Response['result']) && $Response['result'] == 'success') {
+            //    Log::info('Tlync Payment Initiated', ['Response'=>$Response]);
 
-            return ['Response'=>true, 'message'=>'redirect to url', 'url'=>$Response['response']['url']];
+            return ['Response' => true, 'message' => 'redirect to url', 'url' => $Response['response']['url']];
 
-         }else{
+        } else {
 
-            return ['Response'=>false, 'message'=>$Response?? 'Failed ToConnect to Tlync System'];
+            return ['Response' => false, 'message' => $Response ?? 'Failed ToConnect to Tlync System'];
         }
     }
 
@@ -60,16 +60,16 @@ protected $token;
         $url = $this->url . $endpoint;
         $token = $this->token;
         try {
-            $Response = Http::withHeaders(['Accept'=>'application/json'])->withToken($token)->post($url, $payload);
+            $Response = Http::withHeaders(['Accept' => 'application/json'])->withToken($token)->post($url, $payload);
         } catch (\Exception $e) {
-     //       Log::error($e);
-            return ['Response'=>false, 'message'=>$e?? 'Failed ToConnect to Tlync System', 'code'=>$e->getCode()];
+            //       Log::error($e);
+            return ['Response' => false, 'message' => $e ?? 'Failed ToConnect to Tlync System', 'code' => $e->getCode()];
         }
 
         if ($Response->successful()) {
             return [
-                'result'=>true,
-                'response'=>$Response->json()
+                'result' => true,
+                'response' => $Response->json()
             ];
 
         } else {
@@ -78,12 +78,10 @@ protected $token;
     }
 
 
-
-
     public function callback(Request $request)
     {
 
-        $request->validate(['custom_ref'=>'required']);
+        $request->validate(['custom_ref' => 'required']);
 
 
         $Paras = explode('|', $request->custom_ref);
@@ -93,15 +91,16 @@ protected $token;
         } catch (\Exception $e) {
             return False;
         }
-        if (! $para_1 || ! $para_2) {
+        if (!$para_1 || !$para_2) {
             return False;
         }
-      $CallbackClass = config('tlync.handel_call_back_class');
-       $CallBackMethod = config('tlync.handel_method');
+        $CallbackClass = config('tlync.handel_call_back_class');
+        $CallBackMethod = config('tlync.handel_method');
 
-   //     app(App\Actions\Gateways\Tlync\CallBackClass::class)->HandelCallBack($para_1, $para_2, $request->all());
+        ray($CallbackClass);
+        //     app(App\Actions\Gateways\Tlync\CallBackClass::class)->HandelCallBack($para_1, $para_2, $request->all());
+        $Class = new $CallbackClass();
+        $Class->$CallBackMethod($para_1, $para_2, $request->all());
 
-        app( $CallbackClass)->$CallBackMethod($para_1, $para_2, $request->all());
-        return 'ok';
     }
 }
