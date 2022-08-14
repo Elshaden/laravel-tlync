@@ -100,7 +100,7 @@ class Tlync
         ray($CallbackClass);
         //     app(App\Actions\Gateways\Tlync\CallBackClass::class)->HandelCallBack($para_1, $para_2, $request->all());
         $Class = new $CallbackClass();
-        $Class->$CallBackMethod($para_1, $para_2, $request->all());
+        $Class->$CallBackMethod($para_1, $para_2, $request);
 
     }
 }
