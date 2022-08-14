@@ -99,7 +99,9 @@ protected $token;
       $CallbackClass = config('tlync.handel_call_back_class');
        $CallBackMethod = config('tlync.handel_method');
 
-        app(App\Actions\Gateways\Tlync\CallBackClass::class)->HandelCallBack($para_1, $para_2, $request->all());
+   //     app(App\Actions\Gateways\Tlync\CallBackClass::class)->HandelCallBack($para_1, $para_2, $request->all());
+
+        app( $CallbackClass)->$CallBackMethod($para_1, $para_2, $request->all());
         return 'ok';
     }
 }
