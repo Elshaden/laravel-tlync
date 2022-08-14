@@ -85,7 +85,7 @@ class Tlync
         $Ip = $this->getIp();
         Log::info('TylncCallback', ['Request' => $request->all(), 'IP' => $Ip]);
 
-        $request->from_ip = $Ip;
+
         $Paras = explode('|', $request->custom_ref);
         try {
             $para_1 = Hashids::decode($Paras[0])[0];
@@ -102,7 +102,9 @@ class Tlync
         $CallBackMethod = config('tlync.handel_method');
 
         $Class = new $CallbackClass();
-        $Class->$CallBackMethod($para_1, $para_2, $request->all());
+        $request = $request->all();
+        $request['gateway_ip'] = $Ip;
+        $Class->$CallBackMethod($para_1, $para_2, $request);
 
     }
 
