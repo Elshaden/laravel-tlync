@@ -45,7 +45,7 @@ return [
      * The model class that should be used to mark the payment as paid or failed.
      * Example class \App\Models\Invoice.
      */
-    'handel_call_back_class' => env('TLYNC_PAYMENT_CLASS', \App\Models\Invoice::class),
+    'handel_call_back_class' => env('TLYNC_PAYMENT_CLASS', App\Actions\Gateways\Tlync\CallBackClass::class),
 
 
     /*
