@@ -82,8 +82,10 @@ class Tlync
     {
 
         $request->validate(['custom_ref' => 'required']);
-        Log::info('TylncCallback', ['Request' => $request->all(), 'IP' => $request->ip(), 'hostname' => $request->host()]);
+        $Ip = $this->getIp();
+        Log::info('TylncCallback', ['Request' => $request->all(), 'IP' => $Ip, 'hostname' => $request->host()]);
 
+        $request->from_ip = $Ip;
         $Paras = explode('|', $request->custom_ref);
         try {
             $para_1 = Hashids::decode($Paras[0])[0];
@@ -102,5 +104,29 @@ class Tlync
         $Class = new $CallbackClass();
         $Class->$CallBackMethod($para_1, $para_2, $request);
 
+    }
+
+    /**
+     * @return mixed|null
+     */
+    private function getIp()
+    {
+
+        if (isset($_SERVER['HTTP_CLIENT_IP']))
+            $ipaddress = $_SERVER['HTTP_CLIENT_IP'];
+        else if (isset($_SERVER['HTTP_X_FORWARDED_FOR']))
+            $ipaddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        else if (isset($_SERVER['HTTP_X_FORWARDED']))
+            $ipaddress = $_SERVER['HTTP_X_FORWARDED'];
+        else if (isset($_SERVER['HTTP_FORWARDED_FOR']))
+            $ipaddress = $_SERVER['HTTP_FORWARDED_FOR'];
+        else if (isset($_SERVER['HTTP_FORWARDED']))
+            $ipaddress = $_SERVER['HTTP_FORWARDED'];
+        else if (isset($_SERVER['REMOTE_ADDR']))
+            $ipaddress = $_SERVER['REMOTE_ADDR'];
+        else
+            $ipaddress = null;
+
+        return $ipaddress;
     }
 }
