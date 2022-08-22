@@ -28,7 +28,7 @@ class Tlync
     {
         $HashedId = Hashids::encode($para_1);
         $HashedTenantId = Hashids::encode($para_2);
-
+        $randomize = random_bytes(12);
         $payload = [
             'id' => in_array(config('tlync.tlync_environment'), ['local', 'uat', 'test']) ? config('tlync.tlync_test_store_id') : config('tlync.tlync_live_store_id'),
             'amount' => $Amount,
@@ -36,10 +36,10 @@ class Tlync
             'email' => $UserEmail,
             'backend_url' => config('tlync.callback_url'),
             'frontend_url' => config('tlync.frontend_url') . $para_1,
-            'custom_ref' => $HashedId . '|' . rand(100, 10000) . '|' . $HashedTenantId,
+            'custom_ref' => $HashedId . '|' . $randomize . '|' . $HashedTenantId,
         ];
         $payload = array_filter($payload);
-        ray($payload);
+        Log::info('Tlync Payment Initiated PayLoad :', ['data'=>$payload]);
         $endpoint = 'payment/initiate';
 
         $Response = $this->SendRequest($endpoint, $payload);
