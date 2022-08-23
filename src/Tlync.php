@@ -28,7 +28,7 @@ class Tlync
     {
         $HashedId = Hashids::encode($para_1);
         $HashedTenantId = Hashids::encode($para_2);
-        $randomize = random_int(1000000,99999999);
+        $randomize = $para_1 * $para_2 ;
         $payload = [
             'id' => in_array(config('tlync.tlync_environment'), ['local', 'uat', 'test']) ? config('tlync.tlync_test_store_id') : config('tlync.tlync_live_store_id'),
             'amount' => $Amount,
