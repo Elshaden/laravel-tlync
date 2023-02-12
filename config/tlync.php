@@ -5,8 +5,13 @@ return [
 
     'tlync_environment' => env('TLYNC_ENVIRONMENT', 'test'),
 
-  //  'use_own_tlync_account' => false,
-
+ 
+    
+    'use_string_parameters'=>TRUE,
+    
+    'restrict_ip' => false,
+    'allowed_ips' => [env('TLYNC_ALLOWED_IPS')],
+      
 
     'tlync_test_url' => 'https://c7drkx2ege.execute-api.eu-west-2.amazonaws.com/',
     'api_test_key' => env('TLYNC_TEST_STORE_ID'),
@@ -45,7 +50,7 @@ return [
      * The model class that should be used to mark the payment as paid or failed.
      * Example class \App\Models\Invoice.
      */
-    'handel_call_back_class' => env('TLYNC_PAYMENT_CLASS', App\Actions\Gateways\Tlync\CallBackClass::class),
+    'handel_call_back_class' => env('TLYNC_PAYMENT_CLASS', \App\Actions\Tlync\TlyncCallBackClass::class),
 
 
     /*

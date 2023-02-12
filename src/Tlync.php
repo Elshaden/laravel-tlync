@@ -24,13 +24,13 @@ class Tlync
     }
 
 
-    public function InitiatePayment(float $Amount, int $para_1, int $para_2, string $UserPhone, string $UserEmail = Null)
+    public function InitiatePayment(float $Amount,  $para_1, $para_2, string $UserPhone, string $UserEmail = Null)
     {
-        $HashedId = Hashids::encode($para_1);
-        $HashedTenantId = Hashids::encode($para_2);
-        $randomize = $para_1 * $para_2 ;
+        $HashedId = is_integer($para_1)?Hashids::encode($para_1):$para_1;
+        $HashedTenantId = is_integer($para_2)?Hashids::encode($para_2):$para_2;
+        $randomize =  is_integer($para_1) && is_integer($para_2)? $para_1 * $para_2 : $para_1 .'$'. $para_2;
         $payload = [
-            'id' => in_array(config('tlync.tlync_environment'), ['local', 'uat', 'test']) ? config('tlync.tlync_test_store_id') : config('tlync.tlync_live_store_id'),
+            'id' => config('tlync.tlync_environment') == 'production'?config('tlync.tlync_live_store_id') : config('tlync.tlync_test_store_id') ,
             'amount' => $Amount,
             'phone' => $UserPhone,
             'email' => $UserEmail,
@@ -85,11 +85,25 @@ class Tlync
         $Ip = $this->getIp();
         Log::info('TylncCallback', ['Request' => $request->all(), 'IP' => $Ip]);
 
+        if(config('tlync.restrict_ip')){
+            if (!in_array($Ip, config('tlync.allowed_ips'))) {
+                Log::alert('Received Payment From UnAuthorized IP', ['IP' => $Ip]);
+                return False;
+            }
+        }
 
         $Paras = explode('|', $request->custom_ref);
         try {
-            $para_1 = Hashids::decode($Paras[0])[0];
-            $para_2 = Hashids::decode($Paras[2])[0];
+            if(config('tlync.use_string_parameters')){
+                $para_1 = $Paras[0];
+                $para_2 = $Paras[2];
+                $para_3 = $Paras[1];
+            }else{
+                $para_1 = Hashids::decode($Paras[0])[0];
+                $para_2 = Hashids::decode($Paras[2])[0];
+                $para_3 = $Paras[1];
+            }
+          
         } catch (\Exception $e) {
             Log::alert('Received Payment Do Not Match', ['custom_ref' => $request->all()]);
             return False;
