@@ -32,9 +32,9 @@ class Tlync
     public function InitiatePayment(float $Amount,  $para_1, $para_2, int $para_3,string $UserPhone, string $UserEmail = Null)
     {
         if(config('tlync.force_test_mode')){
-            $store_id = config('tlync.tlync_test_store_id');
+            $store_id = config('tlync.api_test_key');
         }else{
-            $store_id = config('app.env') == 'production' ? config('tlync.tlync_live_store_id') : config('tlync.tlync_test_store_id');
+            $store_id = config('app.env') == 'production' ? config('tlync.api_live_key') : config('tlync.api_test_key');
         }
         $randomize = Hashids::connection('tlync')->encode($para_3);
         $payload = [
