@@ -19,9 +19,8 @@ class Tlync
 
     public function __construct()
     {
-        $this->url = in_array(config('tlync.tlync_environment'), ['local', 'uat', 'test']) ? config('tlync.tlync_test_url') : config('tlync.tlync_live_url');
-        $this->token = in_array(config('tlync.tlync_environment'), ['local', 'uat', 'test']) ? config('tlync.tlync_test_token') : config('tlync.tlync_live_token');
-
+        $this->url = config('app.env') == 'production' ? config('tlync.tlync_live_url') : config('tlync.tlync_test_url');
+        $this->token = config('app.env') == 'production' ? config('tlync.tlync_live_token') : config('tlync.tlync_test_token');
     }
 
 
