@@ -2,6 +2,7 @@
 
 namespace Elshaden\Tlync;
 
+use Elshaden\Tlync\Http\TlyncController;
 use Illuminate\Support\Facades\Route;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
@@ -26,6 +27,6 @@ class TlyncServiceProvider extends PackageServiceProvider
 
     public function packageRegistered(): void
     {
-        Route::post('/api/tlync/callback', 'Elshaden\Tlync\Http\TlyncController@callback');
+        Route::post('/api/tlync/callback', [TlyncController::class,'callback']);
     }
 }

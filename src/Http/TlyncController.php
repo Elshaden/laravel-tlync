@@ -4,6 +4,7 @@ namespace Elshaden\Tlync\Http;
 
 use Elshaden\Tlync\Tlync;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class TlyncController
 {
@@ -14,8 +15,9 @@ class TlyncController
     }
 
     public function callback(Request $request)
-   {
-     $response =  app(Tlync::class)->callback($request);
-     return response()->json(null ,200);
+    {
+        Log::info('TlyncController 18: ' . json_encode($request->all()));
+        $response = app(Tlync::class)->callback($request);
+        return response()->json(null, 204);
     }
 }
