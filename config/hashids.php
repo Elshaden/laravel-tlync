@@ -51,8 +51,8 @@ return [
 
         'tlync'=>[
             'salt' => env('HASHIDS_SALT', env('APP_KEY')),
-            'length' => 32,
-             'alphabet' => 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
+            'length' => 16,
+             'alphabet' => 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890$@()%!'
         ],
 
     ],

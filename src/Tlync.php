@@ -3,6 +3,7 @@
 namespace Elshaden\Tlync;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -28,7 +29,7 @@ class Tlync
     {
         $HashedId = is_integer($para_1)?Hashids::encode($para_1):$para_1;
         $HashedTenantId = is_integer($para_2)?Hashids::encode($para_2):$para_2;
-        $randomize =  is_integer($para_1) && is_integer($para_2)? $para_1 * $para_2 : $para_1 .'$'. $para_2;
+        $randomize = Hashids::connection('tlync')->encode(auth()->user()->id);
         $payload = [
             'id' => config('tlync.tlync_environment') == 'production'?config('tlync.tlync_live_store_id') : config('tlync.tlync_test_store_id') ,
             'amount' => $Amount,
@@ -97,13 +98,13 @@ class Tlync
             if(config('tlync.use_string_parameters')){
                 $para_1 = $Paras[0];
                 $para_2 = $Paras[2];
-                $para_3 = $Paras[1];
+                $para_3 = Hashids::connection('tlync')->decode($Paras[1])[0];;
             }else{
                 $para_1 = Hashids::decode($Paras[0])[0];
                 $para_2 = Hashids::decode($Paras[2])[0];
-                $para_3 = $Paras[1];
+                $para_3 = Hashids::connection('tlync')->decode($Paras[1])[0];
             }
-          
+
         } catch (\Exception $e) {
             Log::alert('Received Payment Do Not Match', ['custom_ref' => $request->all()]);
             return False;
@@ -112,6 +113,14 @@ class Tlync
             Log::alert('Received Payment Do Not Match', ['custom_ref' => $request->all()]);
             return False;
         }
+
+        if($para_3 != auth()->user()->id){
+            Log::alert('Received Payment Do Not Match', ['custom_ref' => $request->all()]);
+            return False;
+        }
+
+
+
         $CallbackClass = config('tlync.handel_call_back_class');
         $CallBackMethod = config('tlync.handel_method');
 
