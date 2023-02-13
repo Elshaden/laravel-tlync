@@ -19,17 +19,26 @@ class Tlync
 
     public function __construct()
     {
-        $this->url = config('app.env') == 'production' ? config('tlync.tlync_live_url') : config('tlync.tlync_test_url');
-        $this->token = config('app.env') == 'production' ? config('tlync.tlync_live_token') : config('tlync.tlync_test_token');
+        if(config('tlync.force_test_mode')){
+            $this->url = config('tlync.tlync_test_url');
+            $this->token = config('tlync.tlync_test_token');
+        }else {
+            $this->url = config('app.env') == 'production' ? config('tlync.tlync_live_url') : config('tlync.tlync_test_url');
+            $this->token = config('app.env') == 'production' ? config('tlync.tlync_live_token') : config('tlync.tlync_test_token');
+        }
     }
 
 
     public function InitiatePayment(float $Amount,  $para_1, $para_2, int $para_3,string $UserPhone, string $UserEmail = Null)
     {
-
+        if(config('tlync.force_test_mode')){
+            $store_id = config('tlync.tlync_test_store_id');
+        }else{
+            $store_id = config('app.env') == 'production' ? config('tlync.tlync_live_store_id') : config('tlync.tlync_test_store_id');
+        }
         $randomize = Hashids::connection('tlync')->encode($para_3);
         $payload = [
-            'id' => config('tlync.tlync_environment') == 'production'?config('tlync.tlync_live_store_id') : config('tlync.tlync_test_store_id') ,
+            'id' => $store_id,
             'amount' => $Amount,
             'phone' => $UserPhone,
             'email' => $UserEmail,

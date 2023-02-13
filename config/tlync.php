@@ -5,13 +5,13 @@ return [
 
     'tlync_environment' => env('TLYNC_ENVIRONMENT', 'test'),
 
- 
-    
+    'force_test_mode'=>env('TLYNC_FORCE_TEST_MODE', false),
+
     'use_string_parameters'=>TRUE,
-    
+
     'restrict_ip' => false,
     'allowed_ips' => [env('TLYNC_ALLOWED_IPS')],
-      
+
 
     'tlync_test_url' => 'https://c7drkx2ege.execute-api.eu-west-2.amazonaws.com/',
     'api_test_key' => env('TLYNC_TEST_STORE_ID'),
