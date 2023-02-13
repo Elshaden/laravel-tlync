@@ -95,7 +95,7 @@ class Tlync
         $Paras = explode('|', $request->custom_ref);
         try {
 
-            $Paras[2] = Hashids::connection('tlync')->decode($Paras[1])[0];;
+            $Paras[1] = Hashids::connection('tlync')->decode($Paras[1])[0];;
 
 
         } catch (\Exception $e) {
