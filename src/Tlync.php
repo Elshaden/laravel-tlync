@@ -127,7 +127,7 @@ class Tlync
         $Class = new $CallbackClass();
         $request = $request->all();
         $request['gateway_ip'] = $Ip;
-        $Class->$CallBackMethod($para_1, $para_2, $request);
+        $Class->$CallBackMethod($para_1, $para_2, $para_3, $request);
 
     }
 
