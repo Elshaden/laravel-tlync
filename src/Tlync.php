@@ -25,11 +25,10 @@ class Tlync
     }
 
 
-    public function InitiatePayment(float $Amount,  $para_1, $para_2, string $UserPhone, string $UserEmail = Null)
+    public function InitiatePayment(float $Amount,  $para_1, $para_2, int $para_3,string $UserPhone, string $UserEmail = Null)
     {
-        $HashedId = is_integer($para_1)?Hashids::encode($para_1):$para_1;
-        $HashedTenantId = is_integer($para_2)?Hashids::encode($para_2):$para_2;
-        $randomize = Hashids::connection('tlync')->encode(auth()->user()->id);
+
+        $randomize = Hashids::connection('tlync')->encode($para_3);
         $payload = [
             'id' => config('tlync.tlync_environment') == 'production'?config('tlync.tlync_live_store_id') : config('tlync.tlync_test_store_id') ,
             'amount' => $Amount,
@@ -37,7 +36,7 @@ class Tlync
             'email' => $UserEmail,
             'backend_url' => config('tlync.callback_url'),
             'frontend_url' => config('tlync.frontend_url') . $para_1,
-            'custom_ref' => $HashedId . '|' . $randomize . '|' . $HashedTenantId,
+            'custom_ref' => $para_1 . '|' . $randomize . '|' . $para_2,
         ];
         $payload = array_filter($payload);
         Log::info('Tlync Payment Initiated PayLoad :', ['data'=>$payload]);
@@ -95,31 +94,14 @@ class Tlync
 
         $Paras = explode('|', $request->custom_ref);
         try {
-            if(config('tlync.use_string_parameters')){
-                $para_1 = $Paras[0];
-                $para_2 = $Paras[2];
-                $para_3 = Hashids::connection('tlync')->decode($Paras[1])[0];;
-            }else{
-                $para_1 = Hashids::decode($Paras[0])[0];
-                $para_2 = Hashids::decode($Paras[2])[0];
-                $para_3 = Hashids::connection('tlync')->decode($Paras[1])[0];
-            }
+
+            $Paras[2] = Hashids::connection('tlync')->decode($Paras[1])[0];;
+
 
         } catch (\Exception $e) {
             Log::alert('Received Payment Do Not Match', ['custom_ref' => $request->all()]);
             return False;
         }
-        if (!$para_1 || !$para_2) {
-            Log::alert('Received Payment Do Not Match', ['custom_ref' => $request->all()]);
-            return False;
-        }
-
-        if($para_3 != auth()->user()->id){
-            Log::alert('Received Payment Do Not Match', ['custom_ref' => $request->all()]);
-            return False;
-        }
-
-
 
         $CallbackClass = config('tlync.handel_call_back_class');
         $CallBackMethod = config('tlync.handel_method');
@@ -127,7 +109,7 @@ class Tlync
         $Class = new $CallbackClass();
         $request = $request->all();
         $request['gateway_ip'] = $Ip;
-        $Class->$CallBackMethod($para_1, $para_2, $para_3, $request);
+        $Class->$CallBackMethod($Paras, $request);
 
     }
 
