@@ -2,6 +2,7 @@
 
 namespace Elshaden\Tlync;
 
+use Hashids\Hashids;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Crypt;
@@ -10,13 +11,13 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 
 use App\Models\User;
-use Vinkla\Hashids\Facades\Hashids;
+//use Vinkla\Hashids\Facades\Hashids;
 
 class Tlync
 {
     protected $url;
     protected $token;
-
+protected $HashIds;
     public function __construct()
     {
         if(config('tlync.force_test_mode')){
@@ -26,6 +27,7 @@ class Tlync
             $this->url = config('app.env') == 'production' ? config('tlync.tlync_live_url') : config('tlync.tlync_test_url');
             $this->token = config('app.env') == 'production' ? config('tlync.tlync_live_token') : config('tlync.tlync_test_token');
         }
+        $this->HashIds = new Hashids(config('hashids.connections.tlync.salt'), config('hashids.connections.tlync.length'), config('hashids.connections.tlync.alphabet'));
     }
 
 
@@ -36,7 +38,8 @@ class Tlync
         }else{
             $store_id = config('app.env') == 'production' ? config('tlync.api_live_key') : config('tlync.api_test_key');
         }
-        $randomize = Hashids::connection('tlync')->encode($para_3);
+       // $hashIds = new Hashids(config('hashids.connections.tlync.salt'), config('hashids.connections.tlync.length'), config('hashids.connections.tlync.alphabet'));
+        $randomize = $this->HashIds->encode($para_3);
         $payload = [
             'id' => $store_id,
             'amount' => $Amount,
@@ -102,8 +105,10 @@ class Tlync
 
         $Paras = explode('|', $request->custom_ref);
         try {
+            //$hashIds = new Hashids(config('hashids.connections.tlync.salt'), config('hashids.connections.tlync.length'));
+            $Paras[1] =$this->HashIds->decode($Paras[1])[0];
 
-            $Paras[1] = Hashids::connection('tlync')->decode($Paras[1])[0];;
+           // $Paras[1] = Hashids::connection('tlync')->decode($Paras[1])[0];;
 
 
         } catch (\Exception $e) {
