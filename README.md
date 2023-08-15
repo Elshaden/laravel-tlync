@@ -3,7 +3,6 @@
 # Laravel SKD for Tlync Payment Gateway
 # From [Tadawul Digital Solutions Provider , (TDSP)](https://tdsp.ly) 
 
-[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/elshaden/laravel-tlync/run-tests?label=tests)](
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/elshaden/laravel-tlync.svg?style=flat-square)](https://packagist.org/packages/elshaden/laravel-tlync)
 [![Total Downloads](https://img.shields.io/packagist/dt/elshaden/laravel-tlync.svg?style=flat-square)](https://packagist.org/packages/elshaden/laravel-tlync)
