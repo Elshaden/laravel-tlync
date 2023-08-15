@@ -4,26 +4,24 @@ namespace Elshaden\Tlync;
 
 use Hashids\Hashids;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Redirect;
 
-use App\Models\User;
-//use Vinkla\Hashids\Facades\Hashids;
 
 class Tlync
 {
     protected $url;
+
     protected $token;
-protected $HashIds;
+
+    protected $HashIds;
+
     public function __construct()
     {
-        if(config('tlync.force_test_mode')){
+        if (config('tlync.force_test_mode')) {
             $this->url = config('tlync.tlync_test_url');
             $this->token = config('tlync.tlync_test_token');
-        }else {
+        } else {
             $this->url = config('app.env') == 'production' ? config('tlync.tlync_live_url') : config('tlync.tlync_test_url');
             $this->token = config('app.env') == 'production' ? config('tlync.tlync_live_token') : config('tlync.tlync_test_token');
         }
@@ -31,14 +29,23 @@ protected $HashIds;
     }
 
 
-    public function InitiatePayment(float $Amount,  $para_1, $para_2, int $para_3,string $UserPhone, string $UserEmail = Null)
+    /**
+     * @param float $Amount
+     * @param $para_1
+     * @param $para_2
+     * @param int $para_3
+     * @param string $UserPhone
+     * @param string|Null $UserEmail
+     * @return array
+     */
+    public function InitiatePayment(float $Amount, $para_1, $para_2, int $para_3, string $UserPhone, string $UserEmail = Null)
     {
-        if(config('tlync.force_test_mode')){
+        if (config('tlync.force_test_mode')) {
             $store_id = config('tlync.api_test_key');
-        }else{
+        } else {
             $store_id = config('app.env') == 'production' ? config('tlync.api_live_key') : config('tlync.api_test_key');
         }
-       // $hashIds = new Hashids(config('hashids.connections.tlync.salt'), config('hashids.connections.tlync.length'), config('hashids.connections.tlync.alphabet'));
+        // $hashIds = new Hashids(config('hashids.connections.tlync.salt'), config('hashids.connections.tlync.length'), config('hashids.connections.tlync.alphabet'));
         $randomize = $this->HashIds->encode($para_3);
         $payload = [
             'id' => $store_id,
@@ -50,12 +57,12 @@ protected $HashIds;
             'custom_ref' => $para_1 . '|' . $randomize . '|' . $para_2,
         ];
         $payload = array_filter($payload);
-        Log::info('Tlync Payment Initiated PayLoad :', ['data'=>$payload]);
+        Log::info('Tlync Payment Initiated PayLoad :', ['data' => $payload]);
         $endpoint = 'payment/initiate';
 
         $Response = $this->SendRequest($endpoint, $payload);
         if (isset($Response['result']) && $Response['result'] == 'success') {
-              Log::info('Tlync Payment Initiated', ['Response'=>$Response]);
+            Log::info('Tlync Payment Initiated', ['Response' => $Response]);
 
             return ['Response' => true, 'message' => 'redirect to url', 'url' => $Response['response']['url']];
 
@@ -96,7 +103,7 @@ protected $HashIds;
         $Ip = $this->getIp();
         Log::info('TylncCallback', ['Request' => $request->all(), 'IP' => $Ip]);
 
-        if(config('tlync.restrict_ip')){
+        if (config('tlync.restrict_ip')) {
             if (!in_array($Ip, config('tlync.allowed_ips'))) {
                 Log::alert('Received Payment From UnAuthorized IP', ['IP' => $Ip]);
                 return False;
@@ -106,9 +113,9 @@ protected $HashIds;
         $Paras = explode('|', $request->custom_ref);
         try {
             //$hashIds = new Hashids(config('hashids.connections.tlync.salt'), config('hashids.connections.tlync.length'));
-            $Paras[1] =$this->HashIds->decode($Paras[1])[0];
+            $Paras[1] = $this->HashIds->decode($Paras[1])[0];
 
-           // $Paras[1] = Hashids::connection('tlync')->decode($Paras[1])[0];;
+            // $Paras[1] = Hashids::connection('tlync')->decode($Paras[1])[0];;
 
 
         } catch (\Exception $e) {
