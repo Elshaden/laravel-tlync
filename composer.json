@@ -17,8 +17,8 @@
     ],
     "require": {
         "spatie/laravel-package-tools": "^1.14.0",
-        "illuminate/contracts": "^9.0|^10.0|^11.0"
-
+        "illuminate/contracts": "^9.0|^10.0|^11.0",
+        "hashids/hashids": "^4.1|^5.0"
     },
     "require-dev": {
 
